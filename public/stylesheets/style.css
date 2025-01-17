@@ -1,0 +1,85 @@
+/* Inspiration from https://ctpt.co. */
+@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap");
+
+body {
+  font-family: "IBM Plex Mono", sans-serif;
+  font-size: 12px;
+  line-height: 1.6;
+  background-color: #f8f4eb;
+  color: #111111;
+  margin: 40px;
+  padding: 0;
+  filter: blur(0.2px) grayscale(80%) contrast(95%);
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+  color: #000000;
+}
+
+a:hover {
+  text-decoration: underline;
+  color: #222222;
+}
+
+.project {
+  margin-bottom: 20px;
+}
+
+.project-info {
+  display: flex;
+  gap: 15px;
+}
+
+.project p {
+  margin: 5px 0;
+  max-width: 400px;
+  word-wrap: break-word;
+}
+
+.bullet {
+  margin-right: 5px;
+  display: inline-block;
+  vertical-align: middle;
+  line-height: 1.2;
+}
+
+.bullet svg {
+  width: 16px;
+  height: 16px;
+  stroke: #222222;
+  vertical-align: middle;
+}
+
+.projects-section {
+  margin-top: 20px;
+}
+
+.separator {
+  border-top: 1px solid #333333;
+  width: 35%;
+  margin: 10px 0;
+  opacity: 0.6;
+}
+
+.projects-section h2 {
+  font-size: 12px;
+  font-weight: normal;
+}
+
+.social-links {
+  margin-top: 10px;
+}
+
+.social-links a {
+  margin-right: 15px;
+  font-size: 12px;
+}
+
+#logo {
+  width: 20px;
+  height: auto;
+  display: block;
+  margin-bottom: 10px;
+}
