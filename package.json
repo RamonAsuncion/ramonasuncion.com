@@ -1,0 +1,26 @@
+{
+  "name": "ramonasuncion.com",
+  "version": "1.0.0",
+  "description": "ramonasuncion.com",
+  "main": "index.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RamonAsuncion/ramonasuncion.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/RamonAsuncion/ramonasuncion/issues"
+  },
+  "homepage": "https://github.com/RamonAsuncion/ramonasuncion#readme",
+  "dependencies": {
+    "express": "^4.21.2",
+    "fs": "^0.0.1-security",
+    "js-yaml": "^4.1.0",
+    "mathjax": "^3.2.2"
+  }
+}
