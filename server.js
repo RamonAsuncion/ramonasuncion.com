@@ -2,11 +2,25 @@ const express = require("express");
 const path = require("path");
 const fs = require("fs");
 const yaml = require("js-yaml");
+const { execFileSync } = require("child_process");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 app.use(express.static(path.join(__dirname, "public")));
+
+function getLastModifiedTime() {
+  try {
+    const lastModified = execFileSync("git", ["log", "-1", "--format=%ct"])
+      .toString()
+      .trim();
+    const lastModifiedMS = lastModified * 1000;
+    return lastModifiedMS;
+  } catch (err) {
+    console.log("could not get time", err);
+    return null;
+  }
+}
 
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "index.html"));
@@ -25,6 +39,11 @@ app.get("/data", (req, res) => {
       res.json(data);
     }
   );
+});
+
+app.get("/last-modified", (req, res) => {
+  const lastModifiedTime = getLastModifiedTime();
+  res.json({ lastModifiedTime });
 });
 
 // 404 everything else
