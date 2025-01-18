@@ -1,12 +1,9 @@
 /**
  * dynamically load project section and social media links based on data.yml file.
- *
- * todo:
  */
 fetch("/data")
   .then((response) => response.json())
   .then((data) => {
-    // console.log(data);
     document.getElementById("name").textContent = data.name;
     document.getElementById(
       "email"
