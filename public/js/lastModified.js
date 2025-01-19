@@ -1,9 +1,7 @@
 fetch("/last-modified")
   .then((response) => response.json())
   .then((data) => {
-    console.log("data", data);
     const lastModifiedMS = data.lastModifiedTime;
-    console.log("unix time (client)", lastModifiedMS);
 
     if (lastModifiedMS) {
       const localDate = new Date(lastModifiedMS);
