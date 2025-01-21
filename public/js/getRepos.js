@@ -19,8 +19,7 @@ async function getPublicGithubRepos(username) {
     });
 
     const repos = response.data;
-
-    console.log(repos);
+    // console.log(repos);
 
     repos.forEach((repo) => {
       responseData.push({
@@ -29,19 +28,20 @@ async function getPublicGithubRepos(username) {
         name: repo.name,
         created_at: new Date(repo.created_at).getFullYear(),
         language: repo.language,
+        homepage: repo.homepage,
       });
     });
 
-    console.log(responseData);
-
+    responseData.sort((a, b) => b.created_at - a.created_at);
+    // console.log(responseData);
     return responseData;
   } catch (error) {
     console.error("cant retrieve repos", error);
   }
 }
 
-// getPublicGithubRepos("RamonAsuncion");
-
 module.exports = {
   getPublicGithubRepos,
 };
+
+getPublicGithubRepos("RamonAsuncion");
