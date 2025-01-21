@@ -9,6 +9,8 @@ const octokit = new Octokit({
 
 async function getPublicGithubRepos(username) {
   try {
+    const responseData = [];
+
     const response = await octokit.request("GET /users/{username}/repos", {
       username: username,
       headers: {
@@ -17,23 +19,29 @@ async function getPublicGithubRepos(username) {
     });
 
     const repos = response.data;
-    repos.forEach(repo => {
-      console.log({
-        git_url: repo.git_url,
-        description: repo.description,
+
+    console.log(repos);
+
+    repos.forEach((repo) => {
+      responseData.push({
+        html_url: repo.html_url,
+        description: repo.description ? repo.description : "",
         name: repo.name,
-        created_at: repo.created_at,
-        language: repo.language
+        created_at: new Date(repo.created_at).getFullYear(),
+        language: repo.language,
       });
     });
+
+    console.log(responseData);
+
+    return responseData;
   } catch (error) {
-    console.error(error);
+    console.error("cant retrieve repos", error);
   }
 }
 
-getPublicGithubRepos("RamonAsuncion");
+// getPublicGithubRepos("RamonAsuncion");
 
-// git_url
-// description (could be null)
-// name
-// created_at
+module.exports = {
+  getPublicGithubRepos,
+};
