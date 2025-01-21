@@ -4,3 +4,6 @@ tech stack
 -mathjax (javascript graphics)
 -tailwindcss (not yet)
 -expressjs
+
+run
+-npm start

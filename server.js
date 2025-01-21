@@ -3,6 +3,7 @@ const path = require("path");
 const fs = require("fs");
 const yaml = require("js-yaml");
 const { execFileSync } = require("child_process");
+const { getPublicGithubRepos } = require("./public/js/getRepos.js");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -44,6 +45,20 @@ app.get("/data", (req, res) => {
 app.get("/last-modified", (req, res) => {
   const lastModifiedTime = getLastModifiedTime();
   res.json({ lastModifiedTime });
+});
+
+// fixme: every time it refreshes it calls the api.
+app.get("/github-repos/:username", async (req, res) => {
+  const username = req.params.username;
+
+  console.log("got user", username);
+
+  try {
+    const repos = await getPublicGithubRepos(username);
+    res.json(repos);
+  } catch (error) {
+    res.status(500).json({ error: "can't get repos" });
+  }
 });
 
 // 404 everything else
