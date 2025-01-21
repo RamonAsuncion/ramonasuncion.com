@@ -3,25 +3,32 @@ const config = require("./config.js");
 
 const GIT_KEY = config.API_KEY;
 
-// save this into json file
-// to not constantly spam this.
-// or maybe just check with the
-// git api if anything has been pushed
-// but is this really necessary
+const octokit = new Octokit({
+  auth: GIT_KEY,
+});
 
 async function getPublicGithubRepos(username) {
-  const octokit = new Octokit({
-    auth: GIT_KEY,
-  });
+  try {
+    const response = await octokit.request("GET /users/{username}/repos", {
+      username: username,
+      headers: {
+        "X-GitHub-Api-Version": "2022-11-28",
+      },
+    });
 
-  const repos = await octokit.request("GET /users/{username}/repos", {
-    username: username,
-    headers: {
-      "X-GitHub-Api-Version": "2022-11-28",
-    },
-  });
-
-  console.log("Repos:", repos);
+    const repos = response.data;
+    repos.forEach(repo => {
+      console.log({
+        git_url: repo.git_url,
+        description: repo.description,
+        name: repo.name,
+        created_at: repo.created_at,
+        language: repo.language
+      });
+    });
+  } catch (error) {
+    console.error(error);
+  }
 }
 
 getPublicGithubRepos("RamonAsuncion");
