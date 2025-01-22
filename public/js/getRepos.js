@@ -19,29 +19,27 @@ async function getPublicGithubRepos(username) {
     });
 
     const repos = response.data;
-    // console.log(repos);
 
     repos.forEach((repo) => {
       responseData.push({
         html_url: repo.html_url,
-        description: repo.description ? repo.description : "",
+        description: repo.description || "",
         name: repo.name,
         created_at: new Date(repo.created_at).getFullYear(),
-        language: repo.language,
-        homepage: repo.homepage,
+        language: repo.language || "N/A",
+        homepage: repo.homepage || "",
       });
     });
 
     responseData.sort((a, b) => b.created_at - a.created_at);
-    // console.log(responseData);
+
     return responseData;
   } catch (error) {
     console.error("cant retrieve repos", error);
+    return [];
   }
 }
 
 module.exports = {
   getPublicGithubRepos,
 };
-
-getPublicGithubRepos("RamonAsuncion");
