@@ -48,6 +48,7 @@ app.get("/last-modified", (req, res) => {
 });
 
 // fixme: every time it refreshes it calls the api.
+// https://stackoverflow.com/questions/38179642/how-does-one-limit-rate-of-api-calls-despite-page-reload
 app.get("/github-repos/:username", async (req, res) => {
   const username = req.params.username;
 
@@ -56,8 +57,8 @@ app.get("/github-repos/:username", async (req, res) => {
   try {
     const repos = await getPublicGithubRepos(username);
     res.json(repos);
-  } catch (error) {
-    res.status(500).json({ error: "can't get repos" });
+  } catch (err) {
+    res.status(500).json({ err: "can't get repos" });
   }
 });
 

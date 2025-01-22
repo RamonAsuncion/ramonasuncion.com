@@ -34,8 +34,8 @@ async function getPublicGithubRepos(username) {
     responseData.sort((a, b) => b.created_at - a.created_at);
 
     return responseData;
-  } catch (error) {
-    console.error("cant retrieve repos", error);
+  } catch (err) {
+    console.error("cant retrieve repos", err);
     return [];
   }
 }

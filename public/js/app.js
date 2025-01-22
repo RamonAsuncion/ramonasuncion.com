@@ -11,18 +11,13 @@ fetch("/data")
 
     const projectsSection = document.getElementById("projects-section");
 
-    // fill in projects automatically (flag with github_user)
-    if (data.projects && data.projects.github_user) {
-      const githubUser = data.projects.github_user;
-      console.log("git_user", githubUser);
+    // fill in projects automatically (flag with use_github)
+    if (data.use_github && data.github_user) {
+      const githubUser = data.github_user;
 
       fetch(`/github-repos/${githubUser}`)
         .then((response) => response.json())
         .then((repos) => {
-          console.log(repos);
-
-          // todo: i need to get both of them working together. (manual + automatic)
-
           repos.forEach((repo) => {
             const projectElement = document.createElement("div");
             projectElement.classList.add("project");
@@ -54,7 +49,11 @@ fetch("/data")
 
             projectElement.innerHTML = `
               <div class="project-info">
-                  <p>${repo.name}, <time datetime="${repo.created_at}">${repo.created_at}</time></p>
+                  <p>${
+                    repo.name
+                  }, ${repo.language.toLowerCase()} · <time datetime="${
+              repo.created_at
+            }">${repo.created_at}</time></p>
               </div>
               <p>${repo.description}</p>
               ${linksHTML}`;
@@ -62,7 +61,7 @@ fetch("/data")
             projectsSection.appendChild(projectElement);
           });
         })
-        .catch((error) => console.error("can't get data", error));
+        .catch((err) => console.error("can't get data", err));
     }
 
     // this is for when there is manual stuff
@@ -71,6 +70,8 @@ fetch("/data")
         if (!project || !Array.isArray(project.links)) return;
         const projectElement = document.createElement("div");
         projectElement.classList.add("project");
+
+        // TODO: if use_github I should get list and insert it.
 
         const linksHTML = project.links
           .filter((link) => link)
@@ -91,7 +92,11 @@ fetch("/data")
 
         projectElement.innerHTML = `
             <div class="project-info">
-                <p>${project.name}, <time datetime="${project.year}">${project.year}</time></p>
+                <p>${
+                  project.name
+                }, ${project.language.toLowerCase()} · <time datetime="${
+          project.year
+        }">${project.year}</time></p>
             </div>
             <p>${project.description}</p>
             ${linksHTML}`;
@@ -115,4 +120,4 @@ fetch("/data")
       socialLinksDiv.innerHTML = socialLinksHTML;
     }
   })
-  .catch((error) => console.error("can't load data", error));
+  .catch((err) => console.error("can't load data", err));
