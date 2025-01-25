@@ -10,8 +10,8 @@ fetch("/data")
     ).innerHTML = `<a href="mailto:${data.email}">${data.email}</a>`;
 
     const projectsSection = document.getElementById("projects-section");
+    let githubProjects = [];
 
-    // fill in projects automatically (flag with use_github)
     if (data.use_github && data.github_user) {
       const githubUser = data.github_user;
 
@@ -58,27 +58,35 @@ fetch("/data")
               <p>${repo.description}</p>
               ${linksHTML}`;
 
+            githubProjects.push({
+              element: projectElement,
+              year: Number(repo.created_at),
+            });
+
             projectsSection.appendChild(projectElement);
           });
+          processUserDefinedProjects(data.projects);
         })
         .catch((err) => console.error("can't get data", err));
+    } else {
+      processUserDefinedProjects(data.projects);
     }
 
-    // this is for when there is manual stuff
-    if (Array.isArray(data.projects)) {
-      data.projects.forEach((project) => {
-        if (!project || !Array.isArray(project.links)) return;
-        const projectElement = document.createElement("div");
-        projectElement.classList.add("project");
+    console.log(githubProjects);
 
-        // TODO: if use_github I should get list and insert it.
+    function processUserDefinedProjects(projects) {
+      if (Array.isArray(projects)) {
+        projects.forEach((project) => {
+          if (!project || !Array.isArray(project.links)) return;
+          const projectElement = document.createElement("div");
+          projectElement.classList.add("project");
 
-        const linksHTML = project.links
-          .filter((link) => link)
-          .map((link) => {
-            const domain = new URL(link).hostname;
-            // awesome place to find fonts https://heroicons.com
-            return `
+          const linksHTML = project.links
+            .filter((link) => link)
+            .map((link) => {
+              const domain = new URL(link).hostname;
+              // awesome place to find fonts https://heroicons.com
+              return `
                 <p>
                   <span class="bullet">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
@@ -87,22 +95,55 @@ fetch("/data")
                   </span>
                   <a href="${link}" target="_blank">${domain}</a>
                 </p>`;
-          })
-          .join("");
+            })
+            .join("");
 
-        projectElement.innerHTML = `
+          projectElement.innerHTML = `
             <div class="project-info">
                 <p>${
                   project.name
                 }, ${project.language.toLowerCase()} · <time datetime="${
-          project.year
-        }">${project.year}</time></p>
+            project.year
+          }">${project.year}</time></p>
             </div>
             <p>${project.description}</p>
             ${linksHTML}`;
 
+          console.log("add user defined");
+          addUserDefinedProjects(projectElement, project.year);
+        });
+      }
+    }
+
+    function addUserDefinedProjects(projectElement, projectYear) {
+      console.log(projectElement, projectYear);
+      if (!projectElement || projectYear < 0) {
+        console.log("no user project defined");
+        return;
+      }
+      let projectAdded = false;
+      console.log("len", projectElement.length);
+      for (let i = 0; i < projectElement.length; i++) {
+        // what's the point of this if it's always gonna be one.
+        const githubYear = githubProjects[i].year;
+        console.log(githubYear, projectYear);
+        if (githubYear > projectYear) {
+          console.log("Add here?");
+          /**
+           * before? shouldn't it be after?
+           */
+          projectsSection.insertBefore(
+            projectElement,
+            githubProjects[i].element
+          );
+          projectAdded = true;
+          break;
+        }
+      }
+
+      if (!projectAdded) {
         projectsSection.appendChild(projectElement);
-      });
+      }
     }
 
     const socialLinksDiv = document.getElementById("social-links");
