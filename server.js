@@ -8,6 +8,11 @@ const { getPublicGithubRepos } = require("./public/js/getRepos.js");
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+const cache = {
+  githubRepos: {},
+  getCacheValidity: 24 * 60 * 60 * 1000, // 1 day in milliseconds
+};
+
 app.use(express.static(path.join(__dirname, "public")));
 
 function getLastModifiedTime() {
@@ -47,17 +52,35 @@ app.get("/last-modified", (req, res) => {
   res.json({ lastModifiedTime });
 });
 
-// fixme: every time it refreshes it calls the api.
-// https://stackoverflow.com/questions/38179642/how-does-one-limit-rate-of-api-calls-despite-page-reload
 app.get("/github-repos/:username", async (req, res) => {
   const username = req.params.username;
 
-  console.log("got user", username);
+  const cachedData = cache.githubRepos[username];
+  const now = Date.now();
+
+  if (cachedData && now - cachedData.timestamp < cache.getCacheValidity) {
+    console.log(`Using cached GitHub data for ${username}`);
+    return res.json(cachedData.data);
+  }
 
   try {
+    console.log(`Fetching fresh GitHub data for ${username}`);
     const repos = await getPublicGithubRepos(username);
+
+    cache.githubRepos[username] = {
+      data: repos,
+      timestamp: now,
+    };
+
     res.json(repos);
   } catch (err) {
+    console.error(`Error fetching repos for ${username}:`, err);
+
+    if (cachedData) {
+      console.log(`Returning stale cached data for ${username}`);
+      return res.json(cachedData.data);
+    }
+
     res.status(500).json({ err: "can't get repos" });
   }
 });
