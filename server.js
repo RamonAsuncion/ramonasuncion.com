@@ -23,7 +23,7 @@ function getLastModifiedTime() {
     const lastModifiedMS = lastModified * 1000;
     return lastModifiedMS;
   } catch (err) {
-    console.log("could not get time", err);
+    console.error("could not get time", err);
     return null;
   }
 }
@@ -59,12 +59,12 @@ app.get("/github-repos/:username", async (req, res) => {
   const now = Date.now();
 
   if (cachedData && now - cachedData.timestamp < cache.getCacheValidity) {
-    console.log(`Using cached GitHub data for ${username}`);
+    console.log(`using cached GitHub data for ${username}`);
     return res.json(cachedData.data);
   }
 
   try {
-    console.log(`Fetching fresh GitHub data for ${username}`);
+    console.log(`fetching fresh GitHub data for ${username}`);
     const repos = await getPublicGithubRepos(username);
 
     cache.githubRepos[username] = {
@@ -74,10 +74,10 @@ app.get("/github-repos/:username", async (req, res) => {
 
     res.json(repos);
   } catch (err) {
-    console.error(`Error fetching repos for ${username}:`, err);
+    console.error(`error fetching repos for ${username}:`, err);
 
     if (cachedData) {
-      console.log(`Returning stale cached data for ${username}`);
+      console.log(`returning stale cached data for ${username}`);
       return res.json(cachedData.data);
     }
 
