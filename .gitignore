@@ -1,5 +1,4 @@
-**/*.yml
 node_modules/
 .DS_Store
-public/js/getRepos.js
 public/js/config.js
+public/data.yml
