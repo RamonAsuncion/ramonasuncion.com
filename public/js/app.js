@@ -72,8 +72,6 @@ fetch("/data")
       processUserDefinedProjects(data.projects);
     }
 
-    console.log(githubProjects);
-
     function processUserDefinedProjects(projects) {
       if (Array.isArray(projects)) {
         projects.forEach((project) => {
@@ -109,33 +107,38 @@ fetch("/data")
             <p>${project.description}</p>
             ${linksHTML}`;
 
-          console.log("add user defined");
           addUserDefinedProjects(projectElement, project.year);
         });
       }
     }
 
     function addUserDefinedProjects(projectElement, projectYear) {
-      console.log(projectElement, projectYear);
       if (!projectElement || projectYear < 0) {
-        console.log("no user project defined");
+        console.error("no user project defined");
         return;
       }
+
+      // no github projects.
+      if (githubProjects.length === 0) {
+        projectsSection.appendChild(projectElement);
+        return;
+      }
+
       let projectAdded = false;
-      console.log("len", projectElement.length);
-      for (let i = 0; i < projectElement.length; i++) {
-        // what's the point of this if it's always gonna be one.
+
+      for (let i = 0; i < githubProjects.length; ++i) {
         const githubYear = githubProjects[i].year;
-        console.log(githubYear, projectYear);
-        if (githubYear > projectYear) {
-          console.log("Add here?");
-          /**
-           * before? shouldn't it be after?
-           */
+        if (projectYear >= githubYear) {
+          // since no exact time put before github projects.
           projectsSection.insertBefore(
             projectElement,
             githubProjects[i].element
           );
+          // add to projects array to maintain order.
+          githubProjects.splice(i, 0, {
+            element: projectElement,
+            year: projectYear,
+          });
           projectAdded = true;
           break;
         }
@@ -143,6 +146,7 @@ fetch("/data")
 
       if (!projectAdded) {
         projectsSection.appendChild(projectElement);
+        githubProjects.push({ element: projectElement, year: projectYear });
       }
     }
 
