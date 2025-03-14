@@ -4,5 +4,9 @@ tech stack
 -mathjax (javascript graphics)
 -expressjs
 
+usage
+-data-example.yml->data.yml
+-config-example->config.js
+
 run
 -npm start
