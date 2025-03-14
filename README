@@ -5,8 +5,8 @@ tech stack
 -expressjs
 
 usage
--data-example.yml->data.yml
--config-example->config.js
+-data-example.yml->public/data.yml
+-config-example->public/js/config.js
 
 run
 -npm start

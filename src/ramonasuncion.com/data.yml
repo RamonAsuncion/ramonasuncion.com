@@ -1,0 +1,24 @@
+name: Ramon Asuncion
+email: ramon@b1t.dev
+github_user: RamonAsuncion
+use_github: true
+projects:
+  - name: "TEST"
+    year: 2024
+    description: "TEST"
+    language: "TEST"
+    links:
+      - https://github.com/RamonAsuncion/TEST
+  - name: "TEST2"
+    year: 2024
+    description: "TEST"
+    language: "TEST"
+    links:
+      - https://github.com/RamonAsuncion/TEST
+social_links:
+  twitter:
+    - "https://x.com/anteasuncion"
+  github:
+    - "https://github.com/RamonAsuncion"
+  youtube:
+    - "https://www.youtube.com/@meanmetrics"
