@@ -1,15 +1,23 @@
-const { Octokit } = require("octokit");
 const config = require("../config.js");
-
 const GIT_KEY = config.API_KEY;
 
-const octokit = new Octokit({
-  auth: GIT_KEY,
-});
+let octokit = null;
+
+async function initOctokit() {
+  const { Octokit } = await import("octokit");
+  octokit = new Octokit({
+    auth: GIT_KEY,
+  });
+  return octokit;
+}
 
 async function getPublicGithubRepos(username) {
   try {
     const responseData = [];
+
+    if (!octokit) {
+      await initOctokit();
+    }
 
     const response = await octokit.request("GET /users/{username}/repos", {
       username: username,
@@ -39,6 +47,10 @@ async function getPublicGithubRepos(username) {
     return [];
   }
 }
+
+initOctokit().catch((err) =>
+  console.error("Failed to initialize Octokit:", err)
+);
 
 module.exports = {
   getPublicGithubRepos,
