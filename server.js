@@ -3,7 +3,7 @@ const path = require("path");
 const fs = require("fs");
 const yaml = require("js-yaml");
 const { execFileSync } = require("child_process");
-const { getPublicGithubRepos } = require("./public/js/getRepos.js");
+const { getPublicGithubRepos } = require("./src/getRepos.js");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
