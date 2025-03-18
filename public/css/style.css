@@ -9,7 +9,8 @@ body {
   color: #111111;
   margin: 40px;
   padding: 0;
-  filter: blur(0.2px) grayscale(80%) contrast(95%);
+  -webkit-filter: grayscale(80%) contrast(95%) blur(0.8px);
+  filter: grayscale(80%) contrast(95%) blur(0.8px);
 }
 
 a {
