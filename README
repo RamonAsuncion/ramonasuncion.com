@@ -3,10 +3,12 @@ ramonasuncion.com
 tech stack
 -mathjax (javascript graphics)
 -expressjs
+-pm2
 
 usage
--data-example.yml->public/data.yml
--config-example->public/js/config.js
+-src/data-example.yml->public/data.yml
+-src/.env-example->.env
 
 run
--npm start
+-pm2 start server.js
+-pm2 logs
