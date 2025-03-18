@@ -1,5 +1,5 @@
 const { Octokit } = require("octokit");
-const config = require("./config.js");
+const config = require("../config.js");
 
 const GIT_KEY = config.API_KEY;
 

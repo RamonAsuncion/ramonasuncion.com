@@ -1,4 +1,5 @@
 node_modules/
 .DS_Store
-public/js/config.js
+config.js
 public/data.yml
+.env
