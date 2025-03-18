@@ -61,12 +61,10 @@ app.get("/github-repos/:username", async (req, res) => {
   const now = Date.now();
 
   if (cachedData && now - cachedData.timestamp < cache.getCacheValidity) {
-    console.log(`using cached GitHub data for ${username}`);
     return res.json(cachedData.data);
   }
 
   try {
-    console.log(`fetching fresh GitHub data for ${username}`);
     const repos = await getPublicGithubRepos(username);
 
     cache.githubRepos[username] = {
@@ -79,7 +77,6 @@ app.get("/github-repos/:username", async (req, res) => {
     console.error(`error fetching repos for ${username}:`, err);
 
     if (cachedData) {
-      console.log(`returning stale cached data for ${username}`);
       return res.json(cachedData.data);
     }
 
