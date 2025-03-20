@@ -1,6 +1,10 @@
 /**
  * dynamically load project section and social media links based on data.yml file.
  */
+
+const loading = document.getElementById("loading");
+loading.classList.add("active");
+
 fetch("/data")
   .then((response) => response.json())
   .then((data) => {
@@ -164,5 +168,8 @@ fetch("/data")
         .join(" ");
       socialLinksDiv.innerHTML = socialLinksHTML;
     }
+  })
+  .finally(() => {
+    loading.classList.remove("active");
   })
   .catch((err) => console.error("can't load data", err));

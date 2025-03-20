@@ -84,3 +84,30 @@ a:hover {
   display: block;
   margin-bottom: 10px;
 }
+
+.loading {
+  display: none;
+  font-size: 12px;
+  color: #000000;
+  margin: 20px 0;
+}
+
+.loading.active {
+  display: block;
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 0.8;
+  }
+  100% {
+    opacity: 0.4;
+  }
+}
+
+.loading-pulse {
+  animation: pulse 1.5s ease-in-out infinite;
+}

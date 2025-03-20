@@ -35,6 +35,8 @@ app.get("/", (req, res) => {
 });
 
 app.get("/data", (req, res) => {
+  res.set("Cache-Control", "public, max-age=3600");
+
   fs.readFile(
     path.join(__dirname, "public", "data.yml"),
     "utf8",
