@@ -28,39 +28,35 @@ fetch("/data")
 
             const githubDomain = new URL(repo.html_url).hostname;
             let linksHTML = `
-                  <p>
-                    <span class="bullet">
-                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
-                      </svg>
-                    </span>
-                    <a href="${repo.html_url}" target="_blank">${githubDomain}</a>
-                  </p>`;
+      <p>
+        <span class="bullet">
+          <svg width="8" height="8" xmlns="http://www.w3.org/2000/svg"><circle cx="4" cy="4" r="1.5" fill="#ccc"/></svg>
+        </span>
+        <a href="${repo.html_url}" target="_blank">${githubDomain}</a>
+      </p>`;
 
             if (repo.homepage && repo.homepage !== "") {
               const homepageDomain = new URL(repo.homepage).hostname;
 
               linksHTML += `
-                      <p>
-                        <span class="bullet">
-                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
-                          </svg>
-                        </span>
-                        <a href="${repo.homepage}" target="_blank">${homepageDomain}</a>
-                      </p>`;
+        <p>
+          <span class="bullet">
+            <svg width="8" height="8" xmlns="http://www.w3.org/2000/svg"><circle cx="4" cy="4" r="1.5" fill="#ccc"/></svg>
+          </span>
+          <a href="${repo.homepage}" target="_blank">${homepageDomain}</a>
+        </p>`;
             }
 
             projectElement.innerHTML = `
-              <div class="project-info">
-                  <p>${
-                    repo.name
-                  }, ${repo.language.toLowerCase()} · <time datetime="${
+  <div class="project-info">
+    <p>${
+      repo.name
+    } <span style="font-size: 11px; color: #888; font-weight: normal;">${repo.language.toLowerCase()} &middot; <time datetime="${
               repo.created_at
-            }">${repo.created_at}</time></p>
-              </div>
-              <p>${repo.description}</p>
-              ${linksHTML}`;
+            }">${repo.created_at}</time></span></p>
+  </div>
+  <p>${repo.description}</p>
+  ${linksHTML}`;
 
             githubProjects.push({
               element: projectElement,
@@ -87,13 +83,10 @@ fetch("/data")
             .filter((link) => link)
             .map((link) => {
               const domain = new URL(link).hostname;
-              // awesome place to find fonts https://heroicons.com
               return `
                 <p>
                   <span class="bullet">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                      <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
-                    </svg>
+                    <svg width="8" height="8" xmlns="http://www.w3.org/2000/svg"><circle cx="4" cy="4" r="1.5" fill="#ccc"/></svg>
                   </span>
                   <a href="${link}" target="_blank">${domain}</a>
                 </p>`;
