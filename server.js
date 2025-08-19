@@ -5,7 +5,6 @@ const path = require("path");
 const fs = require("fs");
 const yaml = require("js-yaml");
 const { execFileSync } = require("child_process");
-const { getPublicGithubRepos } = require("./src/getRepos.js");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -54,36 +53,6 @@ app.get("/data", (req, res) => {
 app.get("/last-modified", (req, res) => {
   const lastModifiedTime = getLastModifiedTime();
   res.json({ lastModifiedTime });
-});
-
-app.get("/github-repos/:username", async (req, res) => {
-  const username = req.params.username;
-
-  const cachedData = cache.githubRepos[username];
-  const now = Date.now();
-
-  if (cachedData && now - cachedData.timestamp < cache.getCacheValidity) {
-    return res.json(cachedData.data);
-  }
-
-  try {
-    const repos = await getPublicGithubRepos(username);
-
-    cache.githubRepos[username] = {
-      data: repos,
-      timestamp: now,
-    };
-
-    res.json(repos);
-  } catch (err) {
-    console.error(`error fetching repos for ${username}:`, err);
-
-    if (cachedData) {
-      return res.json(cachedData.data);
-    }
-
-    res.status(500).json({ err: "can't get repos" });
-  }
 });
 
 // 404 everything else
