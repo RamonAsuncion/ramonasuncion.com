@@ -1,14 +1,5 @@
 name: Your Name
 email: test@example.com
-github_user: UserName # This will be used only if use_github is true
-use_github: true # Set to false to manually add projects without GitHub API calls
-projects:
-  - name: "project1"
-    year: 2025
-    description: "My awesome project!"
-    language: "Python"
-    links:
-      - https://github.com/UserName/ProjectName
 social_links:
   github:
     - "https://github.com/UserName"
