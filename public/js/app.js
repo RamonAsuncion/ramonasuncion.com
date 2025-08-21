@@ -5,148 +5,66 @@
 const loading = document.getElementById("loading");
 loading.classList.add("active");
 
+// show light box on click
+document.addEventListener("click", (e) => {
+  if (e.target.classList.contains("project-img")) {
+    const lightbox = document.getElementById("lightbox");
+    const lightboxImg = document.getElementById("lightbox-img");
+    lightbox.style.display = "flex";
+    lightboxImg.src = e.target.src;
+  }
+});
+
+document.querySelector(".lightbox .close").addEventListener("click", () => {
+  document.getElementById("lightbox").style.display = "none";
+});
+
+document.getElementById("lightbox").addEventListener("click", (e) => {
+  if (e.target.id === "lightbox") {
+    e.target.style.display = "none";
+  }
+});
+
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape") {
+    document.getElementById("lightbox").style.display = "none";
+  }
+});
+
 fetch("/data")
   .then((response) => response.json())
   .then((data) => {
+    // Name & Email
     document.getElementById("name").textContent = data.name;
     document.getElementById(
       "email"
     ).innerHTML = `<a href="mailto:${data.email}">${data.email}</a>`;
 
+    // Projects
     const projectsSection = document.getElementById("projects-section");
-    let githubProjects = [];
-
-    if (data.use_github && data.github_user) {
-      const githubUser = data.github_user;
-
-      fetch(`/github-repos/${githubUser}`)
-        .then((response) => response.json())
-        .then((repos) => {
-          repos.forEach((repo) => {
-            const projectElement = document.createElement("div");
-            projectElement.classList.add("project");
-
-            const githubDomain = new URL(repo.html_url).hostname;
-            let linksHTML = `
-      <p>
-        <span class="bullet">
-          <svg width="8" height="8" xmlns="http://www.w3.org/2000/svg"><circle cx="4" cy="4" r="1.5" fill="#ccc"/></svg>
-        </span>
-        <a href="${repo.html_url}" target="_blank">${githubDomain}</a>
-      </p>`;
-
-            if (repo.homepage && repo.homepage !== "") {
-              const homepageDomain = new URL(repo.homepage).hostname;
-
-              linksHTML += `
-        <p>
-          <span class="bullet">
-            <svg width="8" height="8" xmlns="http://www.w3.org/2000/svg"><circle cx="4" cy="4" r="1.5" fill="#ccc"/></svg>
-          </span>
-          <a href="${repo.homepage}" target="_blank">${homepageDomain}</a>
-        </p>`;
-            }
-
-            projectElement.innerHTML = `
-  <div class="project-info">
-    <p>${
-      repo.name
-    } <span style="font-size: 11px; color: #888; font-weight: normal;">${repo.language.toLowerCase()} &middot; <time datetime="${
-              repo.created_at
-            }">${repo.created_at}</time></span></p>
-  </div>
-  <p>${repo.description}</p>
-  ${linksHTML}`;
-
-            githubProjects.push({
-              element: projectElement,
-              year: Number(repo.created_at),
-            });
-
-            projectsSection.appendChild(projectElement);
-          });
-          processUserDefinedProjects(data.projects);
-        })
-        .catch((err) => console.error("can't get data", err));
-    } else {
-      processUserDefinedProjects(data.projects);
+    if (data.projects) {
+      const projectsHTML = data.projects
+        .map(
+          (proj) => `
+        <div class="project">
+          <img src="${proj.image}" alt="${proj.title}" class="project-img" />
+          <div class="project-info">
+            <h3>
+              <a href="${proj.link}" target="_blank">
+                ${proj.title}
+              </a>
+            </h3>
+            <p>${proj.description}</p>
+            <span>${proj.tech.join(" · ")}</span>
+          </div>
+        </div>
+        `
+        )
+        .join("");
+      projectsSection.insertAdjacentHTML("beforeend", projectsHTML);
     }
 
-    function processUserDefinedProjects(projects) {
-      if (Array.isArray(projects)) {
-        projects.forEach((project) => {
-          if (!project || !Array.isArray(project.links)) return;
-          const projectElement = document.createElement("div");
-          projectElement.classList.add("project");
-
-          const linksHTML = project.links
-            .filter((link) => link)
-            .map((link) => {
-              const domain = new URL(link).hostname;
-              return `
-                <p>
-                  <span class="bullet">
-                    <svg width="8" height="8" xmlns="http://www.w3.org/2000/svg"><circle cx="4" cy="4" r="1.5" fill="#ccc"/></svg>
-                  </span>
-                  <a href="${link}" target="_blank">${domain}</a>
-                </p>`;
-            })
-            .join("");
-
-          projectElement.innerHTML = `
-            <div class="project-info">
-                <p>${
-                  project.name
-                }, ${project.language.toLowerCase()} · <time datetime="${
-            project.year
-          }">${project.year}</time></p>
-            </div>
-            <p>${project.description}</p>
-            ${linksHTML}`;
-
-          addUserDefinedProjects(projectElement, project.year);
-        });
-      }
-    }
-
-    function addUserDefinedProjects(projectElement, projectYear) {
-      if (!projectElement || projectYear < 0) {
-        console.error("no user project defined");
-        return;
-      }
-
-      // no github projects.
-      if (githubProjects.length === 0) {
-        projectsSection.appendChild(projectElement);
-        return;
-      }
-
-      let projectAdded = false;
-
-      for (let i = 0; i < githubProjects.length; ++i) {
-        const githubYear = githubProjects[i].year;
-        if (projectYear >= githubYear) {
-          // since no exact time put before github projects.
-          projectsSection.insertBefore(
-            projectElement,
-            githubProjects[i].element
-          );
-          // add to projects array to maintain order.
-          githubProjects.splice(i, 0, {
-            element: projectElement,
-            year: projectYear,
-          });
-          projectAdded = true;
-          break;
-        }
-      }
-
-      if (!projectAdded) {
-        projectsSection.appendChild(projectElement);
-        githubProjects.push({ element: projectElement, year: projectYear });
-      }
-    }
-
+    // Socials
     const socialLinksDiv = document.getElementById("social-links");
     if (data.social_links) {
       const socialLinksHTML = Object.entries(data.social_links)
