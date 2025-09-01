@@ -36,18 +36,21 @@ app.get("/", (req, res) => {
 app.get("/data", (req, res) => {
   res.set("Cache-Control", "public, max-age=3600");
 
-  fs.readFile(
-    path.join(__dirname, "public", "data.yml"),
-    "utf8",
-    (err, yamlText) => {
-      if (err) {
-        return res.status(400).send("data.yml not found");
-      }
+  let file = "data-example.yml";
+  let expectedFile = "data.yml";
 
-      const data = yaml.load(yamlText);
-      res.json(data);
+  if (fs.existsSync("public/" + expectedFile)) {
+    file = expectedFile;
+  }
+
+  fs.readFile(path.join(__dirname, "public", file), "utf8", (err, yamlText) => {
+    if (err) {
+      return res.status(400).send(`${expectedFile} not found`);
     }
-  );
+
+    const data = yaml.load(yamlText);
+    res.json(data);
+  });
 });
 
 app.get("/last-modified", (req, res) => {
