@@ -1,5 +1,3 @@
 node_modules/
 .DS_Store
-public/data.yml
-public/images/projects/
 .env
