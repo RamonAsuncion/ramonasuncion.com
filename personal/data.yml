@@ -7,6 +7,11 @@ projects:
     tech: ["C", "x86_64 Assembly"]
     image: "images/projects/os.png"
     link: "https://github.com/RamonAsuncion/ignisOS"
+  - title: Aurum
+    description: A high-level, procedural, stack-oriented, interpreted language.
+    tech: ["C"]
+    image: "images/projects/aurum.png"
+    link: "https://github.com/RamonAuncion/aurum"
 social_links:
   linkedin:
     - "https://www.linkedin.com/in/ramonasuncion/"
