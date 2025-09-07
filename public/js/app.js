@@ -54,7 +54,10 @@ fetch("/data")
                 ${proj.title}
               </a>
             </h3>
-            <p>${proj.description}</p>
+            <p>
+              ${proj.description}
+              ${proj.blog ? ` <a id="blog-link" href="${proj.blog}" target="_blank">Learn more</a>` : ""}
+            </p>
             <span>${proj.tech.join(" · ")}</span>
           </div>
         </div>

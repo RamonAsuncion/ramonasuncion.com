@@ -1,17 +1,24 @@
 name: Ramon Asuncion
 email: asuncionbatista@gmail.com
-# whoami: "I enjoy system programming, networking, and programming languages design."
 projects:
   - title: IgnisOS
     description: An x64 operating system I've been building for the past year with a custom two-stage bootloader.
     tech: ["C", "x86_64 Assembly"]
     image: "images/projects/os.png"
     link: "https://github.com/RamonAsuncion/ignisOS"
+
   - title: Aurum
     description: A high-level, procedural, stack-oriented, interpreted language.
     tech: ["C"]
     image: "images/projects/aurum.png"
     link: "https://github.com/RamonAuncion/aurum"
+
+  - title: Tic-tac-ai
+    description: A recreation of the classic Tic-tac-toe game on CLI with a PvP or PvAI option.
+    tech: ["C++"]
+    image: "images/projects/tic-tac-ai.png"
+    link: "https://github.com/RamonAsuncion/tic-tac-ai"
+
 social_links:
   linkedin:
     - "https://www.linkedin.com/in/ramonasuncion/"

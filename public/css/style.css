@@ -198,3 +198,12 @@ a:hover {
   color: red;
   cursor: pointer;
 }
+
+#blog-link {
+  color: #007BFF;
+  text-decoration: none;
+}
+
+#blog-link:hover {
+  color: #0056b3;
+}
